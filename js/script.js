@@ -41,15 +41,16 @@ const posts = [
     },
 ]
 
+
 // * milestone 2
 const createPost = (postData) =>{
     const {id,author,img,date,testo,photo,likes} = postData
     const post = ` 
-        <div class="post__header">
+    <div class="post__header">
             <div class="post-meta">
-                <div class="post-meta__icon">
+            <div class="post-meta__icon">
                     <img class="profile-pic" src="${photo}" alt="${author}" />
-                </div>
+                    </div>
                 <div class="post-meta__data">
                     <div class="post-meta__author">${author}</div>
                     <div class="post-meta__time">${date}</div>
@@ -57,19 +58,19 @@ const createPost = (postData) =>{
             </div>
         </div>
         <div class="post__text">
-            ${testo}
+        ${testo}
         </div>
         <div class="post__image">
             <img src="${img}" alt="" />
-        </div>
-        <div class="post__footer">
+            </div>
+            <div class="post__footer">
             <div class="likes js-likes">
                 <div class="likes__cta">
-                    <a class="like-button js-like-button" href="#" data-postid="${id}">
-                        <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
+                <a id="like-button-${id}" class="like-button js-like-button" onclick="onLikePost(${id})" data-postid="${id}">
+                <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
                         <span class="like-button__label">Mi Piace</span>
-                    </a>
-                </div>
+                        </a>
+                        </div>
                 <div class="likes__counter">Piace a <b id="like-counter-${id}" class="js-likes-counter">${likes}</b> persone</div>
             </div>
         </div>`
@@ -84,4 +85,22 @@ for(const data of posts){
 }
 
 // #Milestone 3
-// Se clicchiamo sul tasto "Mi Piace" cambiamo il colore al testo del bottone e incrementiamo il counter dei likes relativo.
+function onLikePost(id){
+    const button =  document.getElementById(`like-button-${id}`)
+    const counter = document.getElementById(`like-counter-${id}`)
+    const post = getPostById(id)
+    if(button.classList.contains('like-button--liked')){
+        button.classList.remove('like-button--liked')
+        post.likes--
+    }else{
+        button.classList.add('like-button--liked')
+        post.likes++
+    }
+    counter.innerText = post.likes
+}
+
+function getPostById(id){
+    for(const post of posts){
+        if(post.id === id) return post
+    }
+}
